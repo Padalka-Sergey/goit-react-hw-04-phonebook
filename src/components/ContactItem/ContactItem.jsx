@@ -1,39 +1,24 @@
 import PropTypes from 'prop-types';
 import { ContactItems, ContactItem, Span, Btn } from './ContactItem.styled';
 
-export const ContactsItem = ({ contacts, filterContacts, onDelete }) => {
-  // console.log(contacts);
-  // console.log(filterContacts);
-
-  if (filterContacts !== null) {
-    return (
+export const ContactsItemList = ({ dataContacts, onDelete }) => {
+  return (
+    dataContacts.length !== 0 && (
       <ContactItems>
-        {filterContacts.map(({ name, number, id }) => (
+        {dataContacts.map(({ name, number, id }) => (
           <ContactItem key={id}>
             {name}: <Span>{number}</Span>
+            <Btn type="button" onClick={() => onDelete(id)}>
+              Delete
+            </Btn>
           </ContactItem>
         ))}
       </ContactItems>
-    );
-  } else {
-    return (
-      contacts.length !== 0 && (
-        <ContactItems>
-          {contacts.map(({ name, number, id }) => (
-            <ContactItem key={id}>
-              {name}: <Span>{number}</Span>
-              <Btn type="button" onClick={() => onDelete(id)}>
-                Delete
-              </Btn>
-            </ContactItem>
-          ))}
-        </ContactItems>
-      )
-    );
-  }
+    )
+  );
 };
 
-ContactsItem.propTypes = {
+ContactsItemList.propTypes = {
   contacts: PropTypes.arrayOf(
     PropTypes.exact({
       id: PropTypes.string.isRequired,

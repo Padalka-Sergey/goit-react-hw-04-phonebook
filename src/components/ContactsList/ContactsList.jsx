@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import { ContactsListBox, ContactsListTitle } from './ContactsList.styled';
 
-export const ContactsList = ({ title, children }) => {
+export const ContactsListWrapper = ({ title, children }) => {
   return (
     <ContactsListBox>
       <ContactsListTitle>{title}</ContactsListTitle>
@@ -11,7 +11,7 @@ export const ContactsList = ({ title, children }) => {
   );
 };
 
-ContactsList.propTypes = {
+ContactsListWrapper.propTypes = {
   title: PropTypes.string.isRequired,
   children: PropTypes.node,
 };
