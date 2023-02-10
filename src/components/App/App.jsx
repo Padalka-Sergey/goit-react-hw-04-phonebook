@@ -1,26 +1,27 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { data } from 'data/data';
 import { Container } from 'components/Container/Container';
 import { ContactForm } from 'components/ContactForm/ContactForm';
 import { ContactsListWrapper } from 'components/ContactsList/ContactsList';
-import { ContactsItemList } from 'components/ContactItem/ContactItem';
-import { Filter } from 'components/Filter/Filter';
 
 export function App() {
-  const [contacts, setContacts] = useState(data);
+  const contactsLocal = localStorage.getItem('contacts');
+  const parsedContacts = JSON.parse(contactsLocal);
+  let dataLocal = data;
+  if (parsedContacts) {
+    dataLocal = parsedContacts;
+  }
+  const [contacts, setContacts] = useState(dataLocal);
   const [filter, setFilter] = useState('');
-
-  const isFirstRender = useRef(true);
 
   const formSubmitHandler = dataHandle => {
     const { name } = dataHandle;
 
-    for (let i = 0; i < contacts.length; i += 1) {
-      if (contacts[i].name === name) {
-        alert(`${contacts[i].name} is already in contacts!`);
-        return true;
-      }
+    const contactFind = contacts.find(contact => contact.name === name);
+    if (contactFind) {
+      alert(`${contactFind.name} is already in contacts!`);
+      return true;
     }
 
     const newContact = {
@@ -55,28 +56,21 @@ export function App() {
   };
 
   useEffect(() => {
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts);
-
-    if (parsedContacts) {
-      setContacts(parsedContacts);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
   return (
     <Container title="Phonebook">
       <ContactForm onSubmitProps={formSubmitHandler} />
-      <ContactsListWrapper title="Contacts">
-        <Filter value={filter} onFilterHandler={onFilterHandler} />
-        <ContactsItemList dataContacts={onDataContacts()} onDelete={onDelete} />
+      <ContactsListWrapper
+        title="Contacts"
+        value={filter}
+        onFilterHandler={onFilterHandler}
+        dataContacts={onDataContacts()}
+        onDelete={onDelete}
+      >
+        {/* <Filter value={filter} onFilterHandler={onFilterHandler} />
+        <ContactsItemList dataContacts={onDataContacts()} onDelete={onDelete} /> */}
       </ContactsListWrapper>
     </Container>
   );

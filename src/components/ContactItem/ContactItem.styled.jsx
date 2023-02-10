@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ContactItems = styled.ul``;
+// export const ContactItems = styled.ul``;
 
 export const ContactItem = styled.li`
   margin-bottom: 10px;
